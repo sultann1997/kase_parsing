@@ -182,3 +182,4 @@ def parse(URL='https://kase.kz/ru/documents/marketvaluation/'):
 if __name__ == '__main__':
     parse()
 
+ 
