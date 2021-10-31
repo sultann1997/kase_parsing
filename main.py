@@ -1,3 +1,6 @@
+#енкодинг win 1251, чтобы питон мог прочесть не латинские буквы
+# -*- coding: cp1251 -*-
+
 import requests
 from bs4 import BeautifulSoup
 import csv
@@ -38,7 +41,7 @@ def connecting_excel_sheets(excel_file):
         if temp_df.empty:
             pass
         else:
-            columns_index = temp_df[temp_df.columns[0]].ne('В№ ГЇ/ГЇ').idxmin() #find row with column names
+            columns_index = temp_df[temp_df.columns[0]].ne('№ п/п').idxmin() #find row with column names
             headers = temp_df.iloc[columns_index]
             if columns_index != 0:
                 non_na_index = 3
@@ -52,22 +55,22 @@ def connecting_excel_sheets(excel_file):
             temp_df = temp_df.loc[:, temp_df.columns.notnull()]
             for column in temp_df.columns:
                 try:
-                    if column.startswith('ГђГ»Г­Г®Г·Г­Г Гї Г¶ГҐГ­Г '):
+                    if column.startswith('Рыночная цена'):
                         temp_list = column.split(',')
-                        temp_df.rename({column: "ГђГ Г±Г·ГҐГІГ­Г Гї Г¶ГҐГ­Г "},
+                        temp_df.rename({column: "Расчетная цена"},
                                     axis=1, inplace=True)
-                        if 'Г…Г¤ГЁГ­ГЁГ¶Г  ГЁГ§Г¬ГҐГ°ГҐГ­ГЁГї Г¶ГҐГ­Г»' in temp_df.columns:
+                        if 'Единица измерения цены' in temp_df.columns:
                             pass
                         else:
-                            temp_df['Г…Г¤ГЁГ­ГЁГ¶Г  ГЁГ§Г¬ГҐГ°ГҐГ­ГЁГї Г¶ГҐГ­Г»'] = temp_list[1]
+                            temp_df['Единица измерения цены'] = temp_list[1]
                 except AttributeError:
                     print(column)
-            if 'Г‚ГЁГ¤ Г¶ГҐГ­Г­Г®Г© ГЎГіГ¬Г ГЈГЁ' in temp_df.columns:
+            if 'Вид ценной бумаги' in temp_df.columns:
                 pass
             else:
-                temp_df['Г‚ГЁГ¤ Г¶ГҐГ­Г­Г®Г© ГЎГіГ¬Г ГЈГЁ'] = sheet_name
-            needed_columns = ['Г’Г®Г°ГЈГ®ГўГ»Г© ГЄГ®Г¤', 'ISIN', 'ГЌГ€ГЌ', 'Г‚ГЁГ¤ Г¶ГҐГ­Г­Г®Г© ГЎГіГ¬Г ГЈГЁ',  "ГЉГ°Г ГІГЄГ®ГҐ Г­Г ГЁГ¬ГҐГ­Г®ГўГ Г­ГЁГҐ ГЅГ¬ГЁГІГҐГ­ГІГ ",
-                            "ГђГ Г±Г·ГҐГІГ­Г Гї Г¶ГҐГ­Г ", "Г…Г¤ГЁГ­ГЁГ¶Г  ГЁГ§Г¬ГҐГ°ГҐГ­ГЁГї Г¶ГҐГ­Г»"]
+                temp_df['Вид ценной бумаги'] = sheet_name
+            needed_columns = ['Торговый код', 'ISIN', 'НИН', 'Вид ценной бумаги',  "Краткое наименование эмитента",
+                            "Расчетная цена", "Единица измерения цены"]
             for column in needed_columns:
                 if column in temp_df.columns:
                     pass
@@ -75,8 +78,8 @@ def connecting_excel_sheets(excel_file):
                     temp_df[str(column)] = " "
             temp_df = temp_df[needed_columns]
             temp_df['ISIN'] = temp_df.apply(
-                lambda x: x['ГЌГ€ГЌ'] if x['ISIN'] == '-' else x['ISIN'], axis=1)
-            temp_df.drop(['ГЌГ€ГЌ'], axis=1, inplace=True)
+                lambda x: x['НИН'] if x['ISIN'] == '-' else x['ISIN'], axis=1)
+            temp_df.drop(['НИН'], axis=1, inplace=True)
             new_df = new_df.append(temp_df)
             new_df.columns = ['TRADE_CODE', 'ISIN', 'TYPE_VALUE', 'SHORT_ISSUER_NAME', 'CALC_PRICE', 'PRICE_UNIT']
     return new_df
@@ -101,30 +104,30 @@ def parse(URL='https://kase.kz/ru/documents/marketvaluation/'):
     file_list = file_list['FILE_NAME'].to_list()
 
     months_dict = {
-        'ГїГ­ГўГ Г°Гї': "01",
-        "ГґГҐГўГ°Г Г«Гї": "02",
-        "Г¬Г Г°ГІГ ": "03",
-        "Г ГЇГ°ГҐГ«Гї": "04",
-        "Г¬Г Гї": "05",
-        "ГЁГѕГ­Гї": "06",
-        "ГЁГѕГ«Гї": "07",
-        "Г ГўГЈГіГ±ГІГ ": "08",
-        "Г±ГҐГ­ГІГїГЎГ°Гї": "09",
-        "Г®ГЄГІГїГЎГ°Гї": "10",
-        "Г­Г®ГїГЎГ°Гї": "11",
-        "Г¤ГҐГЄГ ГЎГ°Гї": "12",
+        'января': "01",
+        "февраля": "02",
+        "марта": "03",
+        "апреля": "04",
+        "мая": "05",
+        "июня": "06",
+        "июля": "07",
+        "августа": "08",
+        "сентября": "09",
+        "октября": "10",
+        "ноября": "11",
+        "декабря": "12",
     }
 
     for year in hrefs:
         for a in year:
             if len(str(a['href'])) > 30 and len(a.text)>10:  # Some links are broken and are too short
                 if a.text.find('.') == -1:
-                    dt_str = a.text[a.text.rfind(' Г­Г  ')+4:][:-5].split(' ') #take the string between value 'Г­Г ' and 'ГЈГ®Г¤Г ' to get date
+                    dt_str = a.text[a.text.rfind(' на ')+4:][:-5].split(' ') #take the string between value 'на' and 'года' to get date
                     dt_str[1] = months_dict[dt_str[1]]
                     date = ''.join(dt_str)
                     date = datetime.strptime(date, '%d%m%Y').strftime('%d-%m-%Y')
                 else:
-                    dt_str = a.text[a.text.rfind(' Г­Г  ')+4:]
+                    dt_str = a.text[a.text.rfind(' на ')+4:]
                     date = datetime.strptime(dt_str, '%d.%m.%Y').strftime('%d-%m-%Y')
                 file_name = a['href'].rsplit('/', 1)[-1]
                 if file_name in file_list: #os.listdir(script_path):
@@ -180,4 +183,3 @@ def parse(URL='https://kase.kz/ru/documents/marketvaluation/'):
 if __name__ == '__main__':
     parse()
 
- 
