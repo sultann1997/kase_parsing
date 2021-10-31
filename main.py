@@ -1,5 +1,3 @@
-# -*- coding: cp1251 -*-
-#åíêîäèíã win 1251, ÷òîáû ïèòîí ìîã ïðî÷åñòü íå ëàòèíñêèå áóêâû
 import requests
 from bs4 import BeautifulSoup
 import csv
@@ -40,7 +38,7 @@ def connecting_excel_sheets(excel_file):
         if temp_df.empty:
             pass
         else:
-            columns_index = temp_df[temp_df.columns[0]].ne('¹ ï/ï').idxmin() #find row with column names
+            columns_index = temp_df[temp_df.columns[0]].ne('Р’в„– Р“Р‡/Р“Р‡').idxmin() #find row with column names
             headers = temp_df.iloc[columns_index]
             if columns_index != 0:
                 non_na_index = 3
@@ -54,22 +52,22 @@ def connecting_excel_sheets(excel_file):
             temp_df = temp_df.loc[:, temp_df.columns.notnull()]
             for column in temp_df.columns:
                 try:
-                    if column.startswith('Ðûíî÷íàÿ öåíà'):
+                    if column.startswith('Р“С’Р“В»Р“В­Р“В®Р“В·Р“В­Р“В Р“С— Р“В¶Р“ТђР“В­Р“В '):
                         temp_list = column.split(',')
-                        temp_df.rename({column: "Ðàñ÷åòíàÿ öåíà"},
+                        temp_df.rename({column: "Р“С’Р“В Р“В±Р“В·Р“ТђР“Р†Р“В­Р“В Р“С— Р“В¶Р“ТђР“В­Р“В "},
                                     axis=1, inplace=True)
-                        if 'Åäèíèöà èçìåðåíèÿ öåíû' in temp_df.columns:
+                        if 'Р“вЂ¦Р“В¤Р“РЃР“В­Р“РЃР“В¶Р“В  Р“РЃР“В§Р“В¬Р“ТђР“В°Р“ТђР“В­Р“РЃР“С— Р“В¶Р“ТђР“В­Р“В»' in temp_df.columns:
                             pass
                         else:
-                            temp_df['Åäèíèöà èçìåðåíèÿ öåíû'] = temp_list[1]
+                            temp_df['Р“вЂ¦Р“В¤Р“РЃР“В­Р“РЃР“В¶Р“В  Р“РЃР“В§Р“В¬Р“ТђР“В°Р“ТђР“В­Р“РЃР“С— Р“В¶Р“ТђР“В­Р“В»'] = temp_list[1]
                 except AttributeError:
                     print(column)
-            if 'Âèä öåííîé áóìàãè' in temp_df.columns:
+            if 'Р“вЂљР“РЃР“В¤ Р“В¶Р“ТђР“В­Р“В­Р“В®Р“В© Р“РЋР“С–Р“В¬Р“В Р“Р€Р“РЃ' in temp_df.columns:
                 pass
             else:
-                temp_df['Âèä öåííîé áóìàãè'] = sheet_name
-            needed_columns = ['Òîðãîâûé êîä', 'ISIN', 'ÍÈÍ', 'Âèä öåííîé áóìàãè',  "Êðàòêîå íàèìåíîâàíèå ýìèòåíòà",
-                            "Ðàñ÷åòíàÿ öåíà", "Åäèíèöà èçìåðåíèÿ öåíû"]
+                temp_df['Р“вЂљР“РЃР“В¤ Р“В¶Р“ТђР“В­Р“В­Р“В®Р“В© Р“РЋР“С–Р“В¬Р“В Р“Р€Р“РЃ'] = sheet_name
+            needed_columns = ['Р“вЂ™Р“В®Р“В°Р“Р€Р“В®Р“СћР“В»Р“В© Р“Р„Р“В®Р“В¤', 'ISIN', 'Р“РЊР“в‚¬Р“РЊ', 'Р“вЂљР“РЃР“В¤ Р“В¶Р“ТђР“В­Р“В­Р“В®Р“В© Р“РЋР“С–Р“В¬Р“В Р“Р€Р“РЃ',  "Р“Р‰Р“В°Р“В Р“Р†Р“Р„Р“В®Р“Тђ Р“В­Р“В Р“РЃР“В¬Р“ТђР“В­Р“В®Р“СћР“В Р“В­Р“РЃР“Тђ Р“Р…Р“В¬Р“РЃР“Р†Р“ТђР“В­Р“Р†Р“В ",
+                            "Р“С’Р“В Р“В±Р“В·Р“ТђР“Р†Р“В­Р“В Р“С— Р“В¶Р“ТђР“В­Р“В ", "Р“вЂ¦Р“В¤Р“РЃР“В­Р“РЃР“В¶Р“В  Р“РЃР“В§Р“В¬Р“ТђР“В°Р“ТђР“В­Р“РЃР“С— Р“В¶Р“ТђР“В­Р“В»"]
             for column in needed_columns:
                 if column in temp_df.columns:
                     pass
@@ -77,8 +75,8 @@ def connecting_excel_sheets(excel_file):
                     temp_df[str(column)] = " "
             temp_df = temp_df[needed_columns]
             temp_df['ISIN'] = temp_df.apply(
-                lambda x: x['ÍÈÍ'] if x['ISIN'] == '-' else x['ISIN'], axis=1)
-            temp_df.drop(['ÍÈÍ'], axis=1, inplace=True)
+                lambda x: x['Р“РЊР“в‚¬Р“РЊ'] if x['ISIN'] == '-' else x['ISIN'], axis=1)
+            temp_df.drop(['Р“РЊР“в‚¬Р“РЊ'], axis=1, inplace=True)
             new_df = new_df.append(temp_df)
             new_df.columns = ['TRADE_CODE', 'ISIN', 'TYPE_VALUE', 'SHORT_ISSUER_NAME', 'CALC_PRICE', 'PRICE_UNIT']
     return new_df
@@ -103,30 +101,30 @@ def parse(URL='https://kase.kz/ru/documents/marketvaluation/'):
     file_list = file_list['FILE_NAME'].to_list()
 
     months_dict = {
-        'ÿíâàðÿ': "01",
-        "ôåâðàëÿ": "02",
-        "ìàðòà": "03",
-        "àïðåëÿ": "04",
-        "ìàÿ": "05",
-        "èþíÿ": "06",
-        "èþëÿ": "07",
-        "àâãóñòà": "08",
-        "ñåíòÿáðÿ": "09",
-        "îêòÿáðÿ": "10",
-        "íîÿáðÿ": "11",
-        "äåêàáðÿ": "12",
+        'Р“С—Р“В­Р“СћР“В Р“В°Р“С—': "01",
+        "Р“Т‘Р“ТђР“СћР“В°Р“В Р“В«Р“С—": "02",
+        "Р“В¬Р“В Р“В°Р“Р†Р“В ": "03",
+        "Р“В Р“Р‡Р“В°Р“ТђР“В«Р“С—": "04",
+        "Р“В¬Р“В Р“С—": "05",
+        "Р“РЃР“С•Р“В­Р“С—": "06",
+        "Р“РЃР“С•Р“В«Р“С—": "07",
+        "Р“В Р“СћР“Р€Р“С–Р“В±Р“Р†Р“В ": "08",
+        "Р“В±Р“ТђР“В­Р“Р†Р“С—Р“РЋР“В°Р“С—": "09",
+        "Р“В®Р“Р„Р“Р†Р“С—Р“РЋР“В°Р“С—": "10",
+        "Р“В­Р“В®Р“С—Р“РЋР“В°Р“С—": "11",
+        "Р“В¤Р“ТђР“Р„Р“В Р“РЋР“В°Р“С—": "12",
     }
 
     for year in hrefs:
         for a in year:
             if len(str(a['href'])) > 30 and len(a.text)>10:  # Some links are broken and are too short
                 if a.text.find('.') == -1:
-                    dt_str = a.text[a.text.rfind(' íà ')+4:][:-5].split(' ') #take the string between value 'íà' and 'ãîäà' to get date
+                    dt_str = a.text[a.text.rfind(' Р“В­Р“В  ')+4:][:-5].split(' ') #take the string between value 'Р“В­Р“В ' and 'Р“Р€Р“В®Р“В¤Р“В ' to get date
                     dt_str[1] = months_dict[dt_str[1]]
                     date = ''.join(dt_str)
                     date = datetime.strptime(date, '%d%m%Y').strftime('%d-%m-%Y')
                 else:
-                    dt_str = a.text[a.text.rfind(' íà ')+4:]
+                    dt_str = a.text[a.text.rfind(' Р“В­Р“В  ')+4:]
                     date = datetime.strptime(dt_str, '%d.%m.%Y').strftime('%d-%m-%Y')
                 file_name = a['href'].rsplit('/', 1)[-1]
                 if file_name in file_list: #os.listdir(script_path):
