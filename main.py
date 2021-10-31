@@ -1,6 +1,5 @@
-#åíêîäèíã win 1251, ÷òîáû ïèòîí ìîã ïðî÷åñòü íå ëàòèíñêèå áóêâû
 # -*- coding: utf8 -*-
-
+#åíêîäèíã win 1251, ÷òîáû ïèòîí ìîã ïðî÷åñòü íå ëàòèíñêèå áóêâû
 import requests
 from bs4 import BeautifulSoup
 import csv
