@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: cp1251 -*-
 #åíêîäèíã win 1251, ÷òîáû ïèòîí ìîã ïðî÷åñòü íå ëàòèíñêèå áóêâû
 import requests
 from bs4 import BeautifulSoup
